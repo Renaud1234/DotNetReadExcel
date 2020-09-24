@@ -49,7 +49,7 @@ namespace ExcelWriter.Controllers
 
             Reports reports = new Reports();
             string sWebRootFolder = _hostingEnvironment.WebRootPath;
-            string sFileName = @"demo.xlsx";
+            string sFileName;
             MemoryStream memory = new MemoryStream();
 
             try
@@ -74,46 +74,51 @@ namespace ExcelWriter.Controllers
             try
             {   // Update Excel file
                 IFormFile excelFile = files[1];
+                XSSFWorkbook workbook;
                 if (excelFile.Length > 0)
                 {
                     sFileName = excelFile.FileName;
-                    using var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.ReadWrite);
-                    excelFile.CopyTo(stream);
-                    stream.Position = 0;
-                    XSSFWorkbook workbook = new XSSFWorkbook(stream);
-
-                    var finalSheet = workbook.GetSheet("Final");
-
-                    foreach (var reportVal in reports.Report.ReportVal)
+                    using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.ReadWrite))
                     {
-                        int cellRow = 0;
-                        int cellCol = 0;
+                        excelFile.CopyTo(stream);
+                        stream.Position = 0;
+                        workbook = new XSSFWorkbook(stream);
 
-                        for (int row = 10; row <= 11; row++)
+                        var finalSheet = workbook.GetSheet("Final");
+
+                        foreach (var reportVal in reports.Report.ReportVal)
                         {
-                            if (finalSheet.GetRow(row).GetCell(1).StringCellValue.Substring(1) == reportVal.ReportRow)
+                            int cellRow = 0;
+                            int cellCol = 0;
+
+                            for (int row = 10; row <= 11; row++)
                             {
-                                cellRow = row;
-                                break;
+                                if (finalSheet.GetRow(row).GetCell(1).StringCellValue.Substring(1) == reportVal.ReportRow)
+                                {
+                                    cellRow = row;
+                                    break;
+                                }
                             }
-                        }
-                        for (int col = 4; col <= 10; col++)
-                        {
-                            if (finalSheet.GetRow(9).GetCell(col).StringCellValue.Substring(1) == reportVal.ReportCol)
+                            for (int col = 4; col <= 10; col++)
                             {
-                                cellCol = col;
-                                break;
+                                if (finalSheet.GetRow(9).GetCell(col).StringCellValue.Substring(1) == reportVal.ReportCol)
+                                {
+                                    cellCol = col;
+                                    break;
+                                }
                             }
-                        }
-                        if (cellRow != 0 && cellCol != 0)
-                        {
-                            var cell = finalSheet.GetRow(cellRow).GetCell(cellCol);
-                            cell.SetCellValue(reportVal.Val);
+                            if (cellRow != 0 && cellCol != 0)
+                            {
+                                var cell = finalSheet.GetRow(cellRow).GetCell(cellCol);
+                                cell.SetCellValue(reportVal.Val);
+                            }
                         }
                     }
-
-                    workbook.Write(stream);
-                }
+                    using(var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open, FileAccess.ReadWrite))
+                    {
+                        workbook.Write(stream);
+                    }
+                } 
                 else
                 {
                     ViewData["ErrorMessage"] = "Excel file is empty.";
