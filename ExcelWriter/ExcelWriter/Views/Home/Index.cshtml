@@ -6,3 +6,15 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<p class="text-danger">@ViewData["ErrorMessage"]</p>
+
+<form asp-action="Index" method="post" enctype="multipart/form-data">
+    <label for="file1">XML file:</label>
+    <input type="file" accept=".xml" name="files" id="file1" />
+    <br />
+    <label for="file2">Excel file:</label>
+    <input type="file" accept=".xls, .xlsx" name="files" id="file2" />
+    <br />
+    <button asp-page-handler="Export">Fusion and Export</button>
+</form>
