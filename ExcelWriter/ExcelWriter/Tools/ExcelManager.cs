@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NPOI.XSSF.UserModel;
 using System.IO;
+using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 
 namespace ExcelWriter.Tools
@@ -30,8 +31,13 @@ namespace ExcelWriter.Tools
                 stream.Position = 0;
                 workbook = new XSSFWorkbook(stream);
             }
-
+                        
+            if (workbook.GetSheet("Final") == null)
+            {
+                workbook.CloneSheet(0, "Final");
+            }
             var finalSheet = workbook.GetSheet("Final");
+
             foreach (var reportVal in reports.Report.ReportVal)
             {
                 int cellRow = 0;
