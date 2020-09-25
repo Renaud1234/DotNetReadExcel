@@ -16,3 +16,6 @@
 2020-09-25T09:03:29.6346632+01:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
 2020-09-25T09:03:29.6476675+01:00  [INF] Hosting environment: "Development" (c3307c92)
 2020-09-25T09:03:29.6522276+01:00  [INF] Content root path: "C:\Users\renau\source\repos\Renaud1234\DotNetReadExcel\ExcelWriter\ExcelWriter" (b5d60022)
+2020-09-25T09:09:32.5783663+01:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
+2020-09-25T09:09:32.5936693+01:00  [INF] Hosting environment: "Development" (c3307c92)
+2020-09-25T09:09:32.5961612+01:00  [INF] Content root path: "C:\Users\renau\source\repos\Renaud1234\DotNetReadExcel\ExcelWriter\ExcelWriter" (b5d60022)
